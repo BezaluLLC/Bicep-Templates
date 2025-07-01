@@ -1,0 +1,72 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "warehouseName": {
+      "value": "tenant1-dev-dw"
+    },
+    "location": {
+      "value": "East US"
+    },
+    "environment": {
+      "value": "dev"
+    },
+    "deploySqlDatabase": {
+      "value": true
+    },
+    "deployPostgreSQL": {
+      "value": false
+    },
+    "deployCosmosDB": {
+      "value": false
+    },
+    "deploySynapse": {
+      "value": false
+    },
+    "deployDataFactory": {
+      "value": true
+    },
+    "deployDataLake": {
+      "value": true
+    },
+    "deployKeyVault": {
+      "value": true
+    },
+    "deployLogAnalytics": {
+      "value": true
+    },
+    "vnetAddressPrefix": {
+      "value": "10.1.0.0/16"
+    },
+    "sqlSubnetPrefix": {
+      "value": "10.1.1.0/24"
+    },
+    "postgresSubnetPrefix": {
+      "value": "10.1.2.0/24"
+    },
+    "cosmosSubnetPrefix": {
+      "value": "10.1.3.0/24"
+    },
+    "synapseSubnetPrefix": {
+      "value": "10.1.4.0/24"
+    },
+    "servicesSubnetPrefix": {
+      "value": "10.1.10.0/24"
+    },
+    "gatewaySubnetPrefix": {
+      "value": "10.1.11.0/24"
+    },
+    "sqlAdminUsername": {
+      "value": "sqladmin"
+    },
+    "sqlAdminPassword": {
+      "value": "DevPassword123!"
+    },
+    "postgresAdminUsername": {
+      "value": "pgadmin"
+    },
+    "postgresAdminPassword": {
+      "value": "DevPassword123!"
+    }
+  }
+}

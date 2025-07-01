@@ -1,0 +1,71 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "warehouseName": {
+      "value": "datadev"
+    },
+    "location": {
+      "value": "East US"
+    },
+    "environment": {
+      "value": "dev"
+    },
+    "deploySqlDatabase": {
+      "value": true
+    },
+    "deployPostgreSQL": {
+      "value": false
+    },
+    "deployCosmosDB": {
+      "value": true
+    },
+    "deploySynapse": {
+      "value": false
+    },
+    "deployDataFactory": {
+      "value": true
+    },
+    "deployDataLake": {
+      "value": true
+    },
+    "deployKeyVault": {
+      "value": true
+    },
+    "deployLogAnalytics": {
+      "value": true
+    },
+    "dbAdminUsername": {
+      "value": "sqladmin"
+    },
+    "dbAdminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/{subscription-id}/resourceGroups/rg-keyvault/providers/Microsoft.KeyVault/vaults/kv-secrets"
+        },
+        "secretName": "sql-admin-password"
+      }
+    },
+    "vnetAddressPrefix": {
+      "value": "10.1.0.0/16"
+    },
+    "sqlSubnetPrefix": {
+      "value": "10.1.1.0/24"
+    },
+    "postgresSubnetPrefix": {
+      "value": "10.1.2.0/24"
+    },
+    "cosmosSubnetPrefix": {
+      "value": "10.1.3.0/24"
+    },
+    "synapseSubnetPrefix": {
+      "value": "10.1.4.0/24"
+    },
+    "servicesSubnetPrefix": {
+      "value": "10.1.5.0/24"
+    },
+    "gatewaySubnetPrefix": {
+      "value": "10.1.6.0/24"
+    }
+  }
+}

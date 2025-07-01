@@ -1,0 +1,65 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "connectorName": {
+      "value": "prod-upc01"
+    },
+    "environment": {
+      "value": "prod"
+    },
+    "adminUsername": {
+      "value": "azureuser"
+    },
+    "adminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/subscription-id/resourceGroups/rg-keyvault/providers/Microsoft.KeyVault/vaults/kv-tenant1-prod"
+        },
+        "secretName": "vm-admin-password"
+      }
+    },
+    "vmSize": {
+      "value": "Standard_D2as_v5"
+    },
+    "vnetAddressPrefix": {
+      "value": "10.51.0.0/24"
+    },
+    "subnetPrefix": {
+      "value": "10.51.0.0/24"
+    },
+    "computeGalleryId": {
+      "value": "/subscriptions/a0006201-f5fc-4504-bcae-7054111ce562/resourceGroups/RG-DevOpsResources-prod/providers/Microsoft.Compute/galleries/acg_devopsimages_prod"
+    },
+    "universalPrintVersion": {
+      "value": "1.9036.32141"
+    },
+    "deployBackup": {
+      "value": true
+    },
+    "deployMonitoring": {
+      "value": true
+    },
+    "allowRdpFromInternet": {
+      "value": false
+    },
+    "allowedRdpSources": {
+      "value": ["10.0.0.0/8"]
+    },
+    "existingVnetId": {
+      "value": ""
+    },
+    "existingSubnetName": {
+      "value": ""
+    },
+    "tags": {
+      "value": {
+        "CostCenter": "IT-Production",
+        "Owner": "Infrastructure-Team",
+        "Project": "UniversalPrint-Production",
+        "BackupRequired": "true",
+        "MonitoringLevel": "Enhanced"
+      }
+    }
+  }
+}

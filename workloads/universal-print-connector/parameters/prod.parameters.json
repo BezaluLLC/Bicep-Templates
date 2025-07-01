@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "connectorName": {
+      "value": "printer01"
+    },
+    "location": {
+      "value": "East US"
+    },
+    "environment": {
+      "value": "prod"
+    },
+    "adminUsername": {
+      "value": "azureuser"
+    },
+    "adminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/{subscription-id}/resourceGroups/rg-keyvault-prod/providers/Microsoft.KeyVault/vaults/kv-secrets-prod"
+        },
+        "secretName": "vm-admin-password"
+      }
+    },
+    "vmSize": {
+      "value": "Standard_D2as_v5"
+    },
+    "vnetAddressPrefix": {
+      "value": "10.60.0.0/24"
+    },
+    "subnetPrefix": {
+      "value": "10.60.0.0/24"
+    },
+    "computeGalleryId": {
+      "value": "/subscriptions/{subscription-id}/resourceGroups/rg-compute-gallery-prod/providers/Microsoft.Compute/galleries/myGalleryProd"
+    },
+    "universalPrintVersion": {
+      "value": "1.9036.32141"
+    },
+    "deployBackup": {
+      "value": true
+    },
+    "deployMonitoring": {
+      "value": true
+    },
+    "allowRdpFromInternet": {
+      "value": false
+    },
+    "allowedRdpSources": {
+      "value": ["10.0.0.0/8"]
+    },
+    "existingVnetId": {
+      "value": ""
+    },
+    "existingSubnetName": {
+      "value": ""
+    },
+    "tags": {
+      "value": {
+        "CostCenter": "IT",
+        "Department": "Operations",
+        "Criticality": "High"
+      }
+    }
+  }
+}
