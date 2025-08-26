@@ -44,6 +44,9 @@ param deployPostgreSQL bool
 @description('Deploy Azure Cosmos DB for NoSQL/document storage')
 param deployCosmosDB bool
 
+@description('Deploy Azure Database for MySQL Flexible Server')
+param deployMySql bool
+
 @description('Deploy Azure Synapse Analytics workspace')
 param deploySynapse bool
 
@@ -89,6 +92,9 @@ param servicesSubnetPrefix string
 @description('Gateway subnet prefix')
 param gatewaySubnetPrefix string
 
+@description('MySQL subnet prefix')
+param mysqlSubnetPrefix string
+
 // Resource names
 var rgName = 'RG-${warehouseName}'
 var vnetName = 'vNET-${warehouseName}'
@@ -98,6 +104,7 @@ var cosmosSubnetName = 'sNET-CosmosDB'
 var synapseSubnetName = 'sNET-Synapse'
 var servicesSubnetName = 'sNET-Services'
 var gatewaySubnetName = 'sNET-Gateway'
+var mysqlSubnetName = 'sNET-MySQL'
 
 var sqlServerName = 'sql-${warehouseName}-${resourceToken}'
 var sqlDatabaseName = '${warehouseName}-datawarehouse'
@@ -108,6 +115,7 @@ var dataFactoryName = 'adf-${warehouseName}-${resourceToken}'
 var storageAccountName = 'st${warehouseName}${resourceToken}'
 var keyVaultName = 'kv-${warehouseName}-${resourceToken}'
 var logAnalyticsName = 'law-${warehouseName}-${resourceToken}'
+var mysqlServerName = 'mysql-${warehouseName}-${resourceToken}'
 
 // Common tags
 var commonTags = {
@@ -188,6 +196,20 @@ var allPossibleSubnets = [
     serviceEndpoints: []
     enabled: true // Always deploy gateway subnet
   }
+  {
+    name: mysqlSubnetName
+    addressPrefix: mysqlSubnetPrefix
+    delegations: [
+      {
+        name: 'MySqlDelegation'
+        properties: {
+          serviceName: 'Microsoft.DBforMySQL/flexibleServers'
+        }
+      }
+    ]
+    serviceEndpoints: []
+    enabled: deployMySql
+  }
 ]
 
 // Filter enabled subnets  
@@ -216,7 +238,7 @@ module keyVault '../../shared/bicep-modules/security/keyvault.bicep' = if (deplo
     deployPrivateEndpoint: true
     subnetId: vnet.outputs.subnetIds[servicesSubnetName]
     vnetId: vnet.outputs.vnetId
-    logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics.outputs.workspaceId : ''
+  logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics!.outputs.workspaceId : ''
     tags: commonTags
   }
 }
@@ -234,7 +256,7 @@ module dataLake '../../shared/bicep-modules/storage/storage-account.bicep' = if 
       subnetId: vnet.outputs.subnetIds[servicesSubnetName]
       vnetId: vnet.outputs.vnetId
     }
-    logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics.outputs.workspaceId : ''
+  logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics!.outputs.workspaceId : ''
     tags: commonTags
   }
 }
@@ -254,7 +276,7 @@ module sqlDatabase '../../shared/bicep-modules/storage/sql-database.bicep' = if 
       tier: 'Standard'
       capacity: 50
     }
-    logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics.outputs.workspaceId : ''
+  logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics!.outputs.workspaceId : ''
     tags: commonTags
   }
 }
@@ -270,7 +292,25 @@ module postgresql '../../shared/bicep-modules/storage/postgresql.bicep' = if (de
     adminPassword: dbAdminPassword
     postgresVersion: '16'
     subnetId: vnet.outputs.subnetIds[postgresSubnetName]
-    logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics.outputs.workspaceId : ''
+  logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics!.outputs.workspaceId : ''
+    tags: commonTags
+  }
+}
+
+// Deploy MySQL Flexible Server using shared module
+module mysql '../../shared/bicep-modules/storage/mysql.bicep' = if (deployMySql) {
+  scope: resourceGroup
+  name: 'mysql-deployment'
+  params: {
+    serverName: mysqlServerName
+    location: location
+    adminUsername: dbAdminUsername
+    adminPassword: dbAdminPassword
+    networkConfig: {
+      delegatedSubnetId: vnet.outputs.subnetIds[mysqlSubnetName]
+      privateDnsZoneId: ''
+    }
+  logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics!.outputs.workspaceId : ''
     tags: commonTags
   }
 }
@@ -295,7 +335,7 @@ module cosmosDB '../../shared/bicep-modules/storage/cosmosdb.bicep' = if (deploy
         ]
       }
     ]
-    logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics.outputs.workspaceId : ''
+  logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics!.outputs.workspaceId : ''
     tags: commonTags
   }
 }
@@ -308,19 +348,19 @@ module dataFactory '../../shared/bicep-modules/integration/data-factory.bicep' =
     dataFactoryName: dataFactoryName
     location: location
     publicNetworkAccess: 'Disabled'
-    logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics.outputs.workspaceId : ''
+  logAnalyticsWorkspaceId: deployLogAnalytics ? logAnalytics!.outputs.workspaceId : ''
     tags: commonTags
   }
 }
 
 // Deploy Synapse (keeping original module for now - would need a shared Synapse module)
-module synapse 'modules/synapse.bicep' = if (deploySynapse) {
+module synapse 'modules/synapse.module.bicep' = if (deploySynapse) {
   scope: resourceGroup
   name: 'synapse-deployment'
   params: {
     synapseWorkspaceName: synapseWorkspaceName
     location: location
-    storageAccountName: deployDataLake ? dataLake.outputs.storageAccountName : storageAccountName
+  storageAccountName: deployDataLake ? dataLake!.outputs.storageAccountName : storageAccountName
     sqlAdminLogin: dbAdminUsername
     sqlAdminPassword: dbAdminPassword
     vnetId: vnet.outputs.vnetId
@@ -335,12 +375,14 @@ output resourceGroupName string = resourceGroup.name
 output vnetId string = vnet.outputs.vnetId
 output vnetName string = vnet.outputs.vnetName
 
-output logAnalyticsWorkspaceId string = deployLogAnalytics ? logAnalytics.outputs.workspaceId : ''
-output keyVaultId string = deployKeyVault ? keyVault.outputs.keyVaultId : ''
-output storageAccountId string = deployDataLake ? dataLake.outputs.storageAccountId : ''
+// Safe conditional outputs (avoid null module access during compile)
+output logAnalyticsWorkspaceId string = deployLogAnalytics ? logAnalytics!.outputs.workspaceId : ''
+output keyVaultId string = deployKeyVault ? keyVault!.outputs.keyVaultId : ''
+output storageAccountId string = deployDataLake ? dataLake!.outputs.storageAccountId : ''
 
-output sqlServerFqdn string = deploySqlDatabase ? sqlDatabase.outputs.sqlServerFqdn : ''
-output postgresServerFqdn string = deployPostgreSQL ? postgresql.outputs.postgresServerFqdn : ''
-output cosmosDbEndpoint string = deployCosmosDB ? cosmosDB.outputs.cosmosAccountEndpoint : ''
-output dataFactoryId string = deployDataFactory ? dataFactory.outputs.dataFactoryId : ''
-output synapseWorkspaceId string = deploySynapse ? synapse.outputs.synapseWorkspaceId : ''
+output sqlServerFqdn string = deploySqlDatabase ? sqlDatabase!.outputs.sqlServerFqdn : ''
+output postgresServerFqdn string = deployPostgreSQL ? postgresql!.outputs.postgresServerFqdn : ''
+output mysqlServerFqdn string = deployMySql ? mysql!.outputs.serverFqdn : ''
+output cosmosDbEndpoint string = deployCosmosDB ? cosmosDB!.outputs.cosmosAccountEndpoint : ''
+output dataFactoryId string = deployDataFactory ? dataFactory!.outputs.dataFactoryId : ''
+output synapseWorkspaceId string = deploySynapse ? synapse!.outputs.synapseWorkspaceId : ''
