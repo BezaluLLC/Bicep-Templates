@@ -21,25 +21,21 @@ Browse available templates programmatically via the catalog:
 
 ```
 📦 azure-infrastructure/
-├── 📁 workloads/                    # Individual workload deployments
-│   ├── 📁 data-warehouse/           # Data warehouse infrastructure
-│   ├── 📁 universal-print-connector/# Universal Print Connector infrastructure
-│   ├── 📁 web-application/          # Web application hosting
-│   ├── 📁 analytics-platform/       # Analytics and reporting
-│   └── 📁 network-hub/              # Hub networking infrastructure
-├── 📁 shared/                       # Shared modules and templates
-│   ├── 📁 bicep-modules/            # Reusable Bicep modules
-│   ├── 📁 policy-definitions/       # Azure Policy definitions
-│   └── 📁 rbac-definitions/         # Custom RBAC role definitions
-├── 📁 pipelines/                    # Azure DevOps pipeline definitions
-│   ├── 📁 templates/                # Pipeline template files
-│   ├── 📁 workload-pipelines/       # Workload-specific pipelines
-│   └── 📁 shared-pipelines/         # Shared/utility pipelines
-├── 📁 environments/                 # Environment-specific configurations
-│   ├── 📁 dev/                      # Development environment configs
-│   ├── 📁 test/                     # Test environment configs
-│   └── 📁 prod/                     # Production environment configs
-└── 📁 docs/                         # Documentation and guides
+├── 📁 workloads/                             # Individual workload deployments
+│   ├── 📁 data-warehouse/                    # Data warehouse infrastructure
+│   ├── 📁 universal-print-connector/         # Universal Print Connector infrastructure
+│   ├── 📁 web-application/                   # Web application hosting
+│   ├── 📁 analytics-platform/                # Analytics and reporting
+│   └── 📁 virtual-network-gateway-hub/       # Hub networking infrastructure
+├── 📁 shared/                                # Shared modules and templates
+│   ├── 📁 bicep-modules/                     # Reusable Bicep modules
+│   ├── 📁 policy-definitions/                # Azure Policy definitions
+│   └── 📁 rbac-definitions/                  # Custom RBAC role definitions
+├── 📁 environments/                          # Environment-specific configurations
+│   ├── 📁 dev/                               # Development environment configs
+│   ├── 📁 test/                              # Test environment configs
+│   └── 📁 prod/                              # Production environment configs
+└── 📁 docs/                                  # Documentation and guides
 ```
 
 ## 🎯 Design Principles
