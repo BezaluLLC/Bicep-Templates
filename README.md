@@ -5,99 +5,62 @@ This repository serves as a **Template Library** containing Infrastructure as Co
 ## 🎯 Purpose
 
 This repository is a **reference library** that provides:
+
 - **Discoverable Bicep templates** for common Azure workloads
 - **Reusable modules** for infrastructure components
 - **Standardized parameter schemas** for consistent deployments
 
 ## 🏗️ Repository Structure
 
-```
+```text
 📦 azure-infrastructure/
 ├── 📁 workloads/                             # Individual workload deployments
 │   ├── 📁 data-warehouse/                    # Data warehouse infrastructure
 │   ├── 📁 universal-print-connector/         # Universal Print Connector infrastructure
-│   ├── 📁 web-application/                   # Web application hosting
-│   ├── 📁 analytics-platform/                # Analytics and reporting
-│   └── 📁 virtual-network-gateway-hub/       # Hub networking infrastructure
-├── 📁 shared/                                # Shared modules and templates
-│   ├── 📁 bicep-modules/                     # Reusable Bicep modules
-│   ├── 📁 policy-definitions/                # Azure Policy definitions
-│   └── 📁 rbac-definitions/                  # Custom RBAC role definitions
+│   └── 📁 hub-network-avm/       # Hub networking infrastructure
 ├── 📁 environments/                          # Environment-specific configurations
-│   ├── 📁 dev/                               # Development environment configs
-│   ├── 📁 test/                              # Test environment configs
-│   └── 📁 prod/                              # Production environment configs
+│   └── 📁 exampletenant/
+│       ├── 📁 test/                              # Test environment configs
+│       └── 📁 prod/                              # Production environment configs
 └── 📁 docs/                                  # Documentation and guides
 ```
 
 ## 🎯 Design Principles
 
 ### 1. **Workload Isolation**
+
 - Each workload is self-contained in its own folder
 - Independent deployment capabilities
-- Workload-specific parameter files and configurations
 
 ### 2. **Shared Components**
-- Common Bicep modules for reusability
+
+- Platform workloads for centralized dependencies
+- Azure Verified Bicep modules for first-party support
 - Standardized naming conventions
 - Shared policy and RBAC definitions
 
 ### 3. **Multi-Tenant/Multi-Subscription Support**
+
 - Environment-specific parameter files
-- Tenant and subscription abstraction
-- Service connection management per environment
-
-### 4. **Azure DevOps Integration**
-- YAML pipeline definitions
-- Service connections per tenant/subscription
-- Variable groups for environment configuration
-
-## 🚀 Consumption Patterns
-
-### 1. Direct File Access
-Access templates directly from the repository:
-
-```bash
-# Download template via raw GitHub URL
-curl https://raw.githubusercontent.com/yourorg/azure-infrastructure/main/workloads/data-warehouse/main.bicep
-
-# Download parameter schema
-curl https://raw.githubusercontent.com/yourorg/azure-infrastructure/main/workloads/data-warehouse/parameters.schema.json
-```
-
-### 2. GitHub API Access
-Use GitHub API for programmatic discovery:
-
-```bash
-# List all workloads
-curl https://api.github.com/repos/yourorg/azure-infrastructure/contents/workloads
-
-# Get specific template
-curl https://api.github.com/repos/yourorg/azure-infrastructure/contents/workloads/data-warehouse/main.bicep
-```
 
 ## 📋 Available Workloads
 
 | Workload | Description | Status |
 |----------|-------------|--------|
-| **data-warehouse** | Comprehensive data analytics platform | ✅ Ready |
-| **universal-print-connector** | Windows VM with Universal Print Connector | ✅ Ready |
-| **web-application** | Scalable web application hosting | 🚧 Planned |
-| **analytics-platform** | Business intelligence and reporting | 🚧 Planned |
-| **network-hub** | Hub networking for hybrid connectivity | 🚧 Planned |
+| **data-warehouse** | Comprehensive data analytics platform | 🚧 Planned |
+| **universal-print-connector** | Windows VM with Universal Print Connector | 🚧 Planned |
+| **hub-network-avm** | Hub networking for hybrid connectivity | ✅ Ready |
 
-## � Documentation
+## 📜 Documentation
 
-- **[Template Catalog](catalog.json)** - Machine-readable manifest of all templates
-- **[OpenAPI Specification](api/openapi.json)** - REST API for template discovery
-- **[Consumption Guide](CONSUMPTION.md)** - Detailed examples for using templates in automation
-- **[Quick Start Guide](QUICKSTART.md)** - Fast track to using templates
-- **[Deployment Guide](DEPLOYMENT.md)** - Comprehensive deployment instructions
+- **[Quick Start Guide](docs/QUICKSTART.md)** - Fast track to using templates
+- **[Deployment Guide](docs/DEPLOYMENT.md)** - Comprehensive deployment instructions
 - **[Multi-Tenant Strategy](docs/multi-tenant-strategy.md)** - Architecture for multiple environments
 
 ## 🔗 Integration Examples
 
 ### Terraform Integration
+
 ```hcl
 # Use Bicep templates with Terraform AzAPI provider
 resource "azapi_resource_action" "deploy_from_template" {
@@ -116,6 +79,7 @@ resource "azapi_resource_action" "deploy_from_template" {
 ```
 
 ### PowerShell Integration
+
 ```powershell
 # Download and deploy template
 $templateUrl = "https://raw.githubusercontent.com/yourorg/azure-infrastructure/main/workloads/data-warehouse/main.bicep"

@@ -5,15 +5,18 @@ This directory contains reusable Bicep modules that can be shared across multipl
 ## Module Categories
 
 ### 🔍 **Monitoring** (`monitoring/`)
+
 - **Log Analytics**: Centralized logging and monitoring workspace
 - **Application Insights**: Application performance monitoring (planned)
 
 ### 🔒 **Security** (`security/`)
+
 - **Key Vault**: Secure secret and certificate management
 - **Backup**: Recovery Services vault and backup policies
 - **NSG Rules**: Common network security group rule templates (planned)
 
 ### 🌐 **Networking** (`networking/`)
+
 - **VNet Basic**: Simple virtual network with configurable subnets (planned)
 - **VNet Hub**: Hub virtual network for hub-spoke architectures (planned)
 - **VNet Spoke**: Spoke virtual network with service-specific subnets (planned)
@@ -22,6 +25,7 @@ This directory contains reusable Bicep modules that can be shared across multipl
 - **Private Endpoints**: Private endpoint creation for Azure services (planned)
 
 ### 💾 **Storage** (`storage/`)
+
 - **SQL Database**: Azure SQL Database server and database (planned)
 - **PostgreSQL**: PostgreSQL Flexible Server (planned)
 - **Cosmos DB**: Cosmos DB accounts and databases (planned)
@@ -29,25 +33,30 @@ This directory contains reusable Bicep modules that can be shared across multipl
 - **Synapse**: Synapse Analytics workspace (planned)
 
 ### 💻 **Compute** (`compute/`)
+
 - **Virtual Machine**: Generalized VM deployment for Windows/Linux (planned)
 - **Data Factory**: Data Factory instances for ETL pipelines (planned)
 
 ## Module Standards
 
 ### **Naming Conventions**
+
 - Module files: `kebab-case.bicep` (e.g., `log-analytics.bicep`)
 - Resources: Follow Azure naming conventions with prefixes
 - Parameters: `camelCase` for consistency
 - Variables: `camelCase` for internal use
 
 ### **Parameter Standards**
+
 - **Required parameters**: Essential for module functionality
 - **Optional parameters**: Provide sensible defaults
 - **Parameter validation**: Use `@allowed`, `@minValue`, `@maxValue` where appropriate
 - **Parameter descriptions**: Clear, concise descriptions for all parameters
 
 ### **Tagging Strategy**
+
 All modules support a standard set of tags:
+
 ```bicep
 @description('Resource tags for Azure resources')
 param tags object = {}
@@ -61,6 +70,7 @@ var standardTags = union(tags, {
 ```
 
 ### **Security Standards**
+
 - **Private endpoints**: Enabled by default for PaaS services
 - **Network access**: Restricted to VNet by default
 - **Encryption**: All data encrypted at rest and in transit
@@ -68,7 +78,9 @@ var standardTags = union(tags, {
 - **Monitoring**: Diagnostic settings enabled for all resources
 
 ### **Output Standards**
+
 All modules provide consistent outputs:
+
 - **Resource ID**: Full resource identifier for referencing
 - **Resource name**: Name of the created resource
 - **Principal outputs**: Key properties needed by consuming modules
@@ -76,6 +88,7 @@ All modules provide consistent outputs:
 ## Usage Patterns
 
 ### **Module Reference**
+
 ```bicep
 module logAnalytics '../shared/bicep-modules/monitoring/loganalytics.bicep' = {
   name: 'deploy-log-analytics'
@@ -90,6 +103,7 @@ module logAnalytics '../shared/bicep-modules/monitoring/loganalytics.bicep' = {
 ```
 
 ### **Cross-Module Dependencies**
+
 ```bicep
 // Use outputs from one module as inputs to another
 module keyVault '../shared/bicep-modules/security/keyvault.bicep' = {
@@ -108,12 +122,14 @@ module keyVault '../shared/bicep-modules/security/keyvault.bicep' = {
 ## Version Management
 
 ### **Semantic Versioning**
+
 - **Major.Minor.Patch** format (e.g., 1.0.0)
 - **Major**: Breaking changes to parameters or outputs
 - **Minor**: New features, backward compatible
 - **Patch**: Bug fixes, no functional changes
 
 ### **Compatibility**
+
 - Maintain backward compatibility within major versions
 - Document breaking changes in module README files
 - Provide migration guides for major version updates
@@ -121,6 +137,7 @@ module keyVault '../shared/bicep-modules/security/keyvault.bicep' = {
 ## Testing Standards
 
 ### **Validation Requirements**
+
 - [ ] Module deploys successfully in test environment
 - [ ] All parameters properly validated
 - [ ] Outputs provide expected values
@@ -128,6 +145,7 @@ module keyVault '../shared/bicep-modules/security/keyvault.bicep' = {
 - [ ] Monitoring and diagnostic settings enabled
 
 ### **Test Environments**
+
 - **Development**: Basic functionality testing
 - **Staging**: Integration testing with other modules
 - **Production**: Performance and security validation
@@ -135,6 +153,7 @@ module keyVault '../shared/bicep-modules/security/keyvault.bicep' = {
 ## Contributing
 
 ### **Module Development Process**
+
 1. **Analysis**: Review existing implementations and requirements
 2. **Design**: Create module specification and parameter design
 3. **Implementation**: Develop module following standards
@@ -143,6 +162,7 @@ module keyVault '../shared/bicep-modules/security/keyvault.bicep' = {
 6. **Review**: Code review and approval process
 
 ### **Code Review Checklist**
+
 - [ ] Follows naming conventions and standards
 - [ ] Includes proper parameter validation
 - [ ] Implements security best practices
@@ -164,6 +184,7 @@ module keyVault '../shared/bicep-modules/security/keyvault.bicep' = {
 ## Support
 
 For questions, issues, or contributions related to shared modules:
+
 - Review module-specific README files
 - Check the implementation checklist in `cline_docs/`
 - Follow the established development process
