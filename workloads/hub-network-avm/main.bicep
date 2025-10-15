@@ -171,7 +171,7 @@ module hubVpnGateway 'br/public:avm/res/network/virtual-network-gateway:0.10.0' 
   ]
 }
 
-module hubNetworkManager 'br/public:avm/res/network/network-manager:0.5.0' = {
+module hubNetworkManager 'br/public:avm/res/network/network-manager:0.5.3' = {
   name: 'networkManager'
   scope: resourceGroup(resourceGroupName)
   params: {
@@ -214,8 +214,7 @@ module hubNetworkManager 'br/public:avm/res/network/network-manager:0.5.0' = {
         appliesToGroups: [
           {
             groupConnectivity: 'DirectlyConnected'
-            isGlobal: false
-            networkGroupResourceId: resourceId('Microsoft.Network/networkManagers/networkGroups', networkManagerName, spokesNetworkGroupName)
+            networkGroupResourceId: resourceId(subscription().subscriptionId, resourceGroupName, 'Microsoft.Network/networkManagers/networkGroups', networkManagerName, spokesNetworkGroupName)
             useHubGateway: true
           }
         ]
