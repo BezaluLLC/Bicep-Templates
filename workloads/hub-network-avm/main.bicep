@@ -10,9 +10,9 @@ param location string = deployment().location
 param tags object = {}
 
 @description('Address space for the hub virtual network. Defaults to site 250 in the 10.0.0.0/8 IPAM scheme.')
-param hubAddressPrefix string = '10.250.0.0/16'
+param hubAddressPrefix string = '10.250.0.0/23'
 
-@description('CIDR prefixes for hub subnets; defaults align with the 10.250.0.0/16 allocation.')
+@description('CIDR prefixes for hub subnets; defaults align with the 10.250.0.0/23 allocation.')
 type HubSubnetPrefixes = {
   gateway: string
   firewall: string
@@ -148,6 +148,8 @@ module hubVirtualNetwork 'br/public:avm/res/network/virtual-network:0.7.0' = {
   }
   dependsOn: [
     hubResourceGroup
+    managementSubnetNsg
+    sharedServicesSubnetNsg
   ]
 }
 
@@ -168,6 +170,7 @@ module hubVpnGateway 'br/public:avm/res/network/virtual-network-gateway:0.10.0' 
   }
   dependsOn: [
     hubResourceGroup
+    hubVirtualNetwork
   ]
 }
 
@@ -223,6 +226,8 @@ module hubNetworkManager 'br/public:avm/res/network/network-manager:0.5.3' = {
   }
   dependsOn: [
     hubResourceGroup
+    hubVirtualNetwork
+    hubVpnGateway
   ]
 }
 
